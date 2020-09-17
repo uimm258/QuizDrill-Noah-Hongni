@@ -6,3 +6,64 @@
   * https://github.com/andreacardybailey/responsive_example/blob/master/styles/responsive-base.css 
   *
 */
+
+h1.welcome{
+  font-family: 'Courier New', Courier, monospace;
+  color: black;  
+}
+
+h2.welcome{
+  font-family: 'Courier New', Courier, monospace;
+  color: black;
+}
+
+
+
+h1.summoner-name{
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 20px;
+  color: #fff;
+  background-color: #279;
+  text-align: center;
+  margin: 0px;
+  padding-top: 20px;
+  padding-right: 40px;
+  display: flex;
+}
+
+button{
+  font-family: 'Courier New', Courier, monospace;
+	font-size: 22px;
+	background-color: #279;
+	color: #fff;
+	border: 0px;
+	border-radius: 3px;
+	padding: 20px;
+	cursor: pointer;
+	margin-bottom: 20px;
+}
+
+button:hover{
+	background-color: #38a;
+}
+
+.slide{
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  width: 100%;
+  z-index: 1;
+  opacity: 0;
+  transition: opacity 0.5s;
+}
+
+.active-slide{
+  opacity: 1;
+  z-index: 2;
+}
+
+.quiz-container{
+  position: relative;
+  height: 200px;
+  margin-top: 40px;
+}
