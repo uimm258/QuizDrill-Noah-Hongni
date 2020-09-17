@@ -12,25 +12,29 @@
 </head>
 
 <body>
+
+  
   <!--This is the first page when quiz is opened-->
   <div class='welcome'>
-    <h1>What Is Your Rank?</h1>
+    <h1 class="welcome">TEST YOUR CURRENT RANK!</h1>
     <h2>League of Legend Pop-Quiz! Submit your summonername to start the quiz.</h2>
     <img src="" alt=""><!--add an imagae on the page-->
 
-    <!--add a userid-->
-    <form id='quiz-welcome-page'>
+    <!--add a userid, the username will be on the top of each page-->
+    <form id="quiz-welcome-page">
       <label for="welcome-page">Your Summonername</label>
       <input type="text" name="welcome-page" class='quiz-welcome-page' placeholder="e.g. BestLeeSinNA">
 
       <!--button goes to the quiz page-->
-      <button type="enter">Submit and Go</button>
+      <button id="next">Submit and Go</button>
     </form>
   </div>
 
   <!--This is the quiz page-->
   <div class="quiz">
-    <h1>Quiz on League of Legends</h1>
+
+    <!--show summoner's name on the very top of each quiz-->
+    <h1 class="summoner-name"> </h1>
   
     <!--write a object in js that contains all the quiz-->
     <div class="quiz-container">
@@ -47,14 +51,17 @@
   </div>
 
   <!--This is a Thank You page-->
-  <div class="thank-you">
-    <h1>Thank you for completing the rank quiz!</h1>
+  <div class="thankyou">
+    <h1 class="summoner-name"> </h1>
+    <h1 class = "thankyou">Thank you For Taking The quiz!</h1>
+    <!--show summoner's name on the very top of each slide-->
+  
   
     <!--type final-rank message in js-->
     <div id="final-rank"></div>
     <div id="display-final-rank"></div>
 
-    <h3>Think you can do better? Try It Again!</h3>
+    <h3 class="thankyou">Think you can do better? Try It Again!</h3>
     <!--button that goes to the welcome-page-->
     <button id="restart">Restart</button>        
   </div>

@@ -7,9 +7,11 @@
   *
 */
 
+/* Design for the welcome page */
 h1.welcome{
   font-family: 'Courier New', Courier, monospace;
   color: black;  
+  font-size: 60px;
 }
 
 h2.welcome{
@@ -31,6 +33,7 @@ h1.summoner-name{
   display: flex;
 }
 
+/* Design for the quiz page */ 
 button{
   font-family: 'Courier New', Courier, monospace;
 	font-size: 22px;
@@ -66,4 +69,17 @@ button:hover{
   position: relative;
   height: 200px;
   margin-top: 40px;
+}
+
+/* Design for the thankyou page */
+h1.thankyou{
+  font-family: 'Courier New', Courier, monospace;
+  color: black;  
+  font-size: 60px;
+}
+
+h3.thankyou{
+  font-family: 'Courier New', Courier, monospace;
+  color: black;  
+  font-size: 60px;
 }
