@@ -23,7 +23,7 @@ const store = {
         'Riot',
         'Blizzard'
       ],
-      correctAnswer: 'Roit'
+      correctAnswer: 'Riot'
     },
     {
       question: 'Who is the champion Tryndamere married to in "League of Legends?"',
@@ -143,6 +143,8 @@ function generateQuestion(counter) {
   return `
   <div class="equiz">
     <h2>${store.questions[counter].question}</h2><br>
+    <p>Questions:${counter+1}/${store.questions.length}</p>
+    <p>Scores:${Math.round(store.score / store.questions.length * 100)}%</p>
     
     <form class="tomwallace">
       <input type="radio" id="answers" name="answer" value="${store.questions[counter].answers[0]}">
@@ -159,7 +161,7 @@ function generateQuestion(counter) {
 
       <button type="submit">Submit</button>
     </form>
-</div>`;
+  </div>`;
 }
 
 function returnCorrectAnswer() {
@@ -181,6 +183,23 @@ function returnThatsWrong() {
   `;
   return wrongTemplate;
 }
+
+function endOfQuiz() {
+  const summary = ` 
+  <div class="end-game">
+    <h1>Thank you For Taking The quiz!</h1> 
+    <h1> Your final score is ${Math.round(store.score / store.questions.length * 100)}%</p>
+    <h3>Think you can do better? Try It Again!</h3>
+    <button class="restart">Restart</button>
+  </div>`;
+  return summary;
+}
+function restartQuiz() {
+  $('.end-game').on('click', '.restart', function () {
+    location.reload();
+  });
+}
+
 function startQuiz() {
   $('.ready-section').on('click', '.ready-butt', function () {
     let userAnswer = $('input[name="welcome-page"]').val();
@@ -191,24 +210,32 @@ function startQuiz() {
     renderAll(question);
   });
 }
+
 function handleAnswerChoice() {
   $('body').submit('#answer-form', function (evt) {
     evt.preventDefault();
     let answer = $('input[name="answer"]:checked').val();
     console.log(answer);
     let correctAns = store.questions[store.questionNumber].correctAnswer;
-    renderResults(correctAns);
+    if (store.questionNumber + 1 === store.questions.length) {
+      renderEndPage();
+    } else {
+      renderResults(correctAns);
+    }  
   });
 }
+
 function handleNextQuestion() {
   $('.correct-answer').on('click', '.next-or-back', function () {
     console.log('Next question button');
     store.quizStarted === true;
     let counter = store.questionNumber;
-    let question = generateQuestion(counter)
+    console.log(counter);
+    let question = generateQuestion(counter);
     renderAll(question);
   });
 }
+
 function checkAnswer(correctAns) {
   let answer = $('input[name="answer"]:checked').val();
   if (answer === correctAns) {
@@ -220,10 +247,18 @@ function checkAnswer(correctAns) {
     return returnThatsWrong();
   }
 }
+
+function renderEndPage(answer) {
+  let page = '';
+  page += endOfQuiz(answer);
+  $('main').html(page);
+  restartQuiz();
+}
+
 function renderResults(answer) {
   let page = '';
   page += checkAnswer(answer);
-  $('.main').html(page);
+  $('main').html(page);
   handleNextQuestion();
 }
 
@@ -235,33 +270,22 @@ function renderAll(template) {
   if (store.quizStarted === true && store.questionNumber < 10) {
     page += template;
   }
-  if (store.quizStarted === true && store.questionNumber === 10 ){
-    page += finalPageSource();
+
+  if (store.quizStarted === true && store.questionNumber === store.questions.length){
+    page += endOfQuiz();
   }
 
-  $('.main').html(page);
+  
+  $('main').html(page);
 }
 
-function restartQuiz(){
-  $('.thankyou-page').on('click', 'restart-butt', function (){
-    startQuiz();
-  });
-}
 
-function finalPageSource(){
-  return `
-  <div class="thankyou-page">
-    <h1 class = "thankyou">Thank you For Taking The quiz!</h1> 
-    <h3 class="thankyou">Think you can do better? Try It Again!</h3>
-    <button class="restart-butt">Restart</button>
-  </div>`;
-}
+
 
 function main() {
   renderAll();
   startQuiz();
   handleAnswerChoice();
   handleNextQuestion();
-  restartQuiz()
 }
 $(main);
