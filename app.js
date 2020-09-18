@@ -63,33 +63,61 @@ function answerTemplateGenerator() {
 } 
 */
 
-function welcomeScreenGenerator() {
+function welcomePageSource() {
   return `<div class='welcome'>
     <h1>What Is Your Rank?</h1>
     <h2>League of Legend Pop-Quiz!</h2>
     <h2>League of Legend Pop-Quiz! Submit your summonername to start the quiz.</h2>
-    <img src="" alt=""><!--add an imagae on the page-->
+    <img src="" alt="">//<!--add an imagae on the page-->
 
-    <!--add a userid-->
     <form id='quiz-welcome-page'>
       <label for="welcome-page">Your Summonername</label>
       <input type="text" name="welcome-page" class='quiz-welcome-page' placeholder="e.g. BestLeeSinNA">
       <button type="enter">Enter</button>
 
-      <!--button goes to the quiz page-->
-      <button type="enter">Submit and Go</button>
+      <button type="submit">Submit and Go</button>
     </form>
   </div>
 `;
 }
 
+function generateQuestion(item) {
+    return `<div class="equiz">
+  <h2>${item.question}</h2>
+  <form>
+  <input type="radio" id="${item.answers[0]}" name="answer" value="${item.answers[0]}">
+  <label for="male">${item.answers[0]}</label><br>
+  <input type="radio" id="${item.answers[1]}" name="answer" value="${item.answers[1]}">
+  <label for="female">${item.answers[1]}</label><br>
+  <input type="radio" id="${item.answers[2]}" name="answer" value="${item.answers[2]}">
+  <label for="other">${item.answers[2]}</label>
+  <input type="radio" id="${item.answers[3]}" name="answer" value="${item.answers[3]}">
+  <label for="other">${item.answers[3]}</label>
+  <button type="submit">Submit</button>
+  </form>
+</div>`;
+}
+
+
+
+function startQuiz() {
+    $('main').on('submit', '#next', function (evt) {
+        console.log('Clicked')
+        store.quizStarted = true;
+        let question = generateQuestion(store.questions[store.questionNumber])
+        render(question)
+    })
+}
+
+
+
+
+
 
 function renderAll() {
     let page = ''
     if (store.quizStarted === false) {
-        page+= welcomeScreenGenerator()
-    } else {
-        page += 'Quiz has begun'
+        page+= welcomePageSource()
     }
     $('.main').html(page)
 }
@@ -118,13 +146,6 @@ function render(html) {
     $('main').html(html)
 }
 
-function handleStartQuiz() {
-    $('main').on('click', '#start', function(evt {
-                    console.log('Clicked')
-                    store.quizStarted = true;
-                    let question = generateQuestion(store.questions[store.questionNumber])
-                    render(question)
-                }
 
 
 
