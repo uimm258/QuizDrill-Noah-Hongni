@@ -1,11 +1,30 @@
 'use strict';
-
 /**
  * Example store structure
  */
 const store = {
   // 5 or more questions are required
   questions: [{
+    question: 'What color is broccoli?',
+    answers: [
+      'red',
+      'orange',
+      'pink',
+      'green'
+    ],
+    correctAnswer: 'green'
+  },
+  {
+    question: 'What is the current year?',
+    answers: [
+      '1970',
+      '2015',
+      '2019',
+      '2005'
+    ],
+    correctAnswer: '2019'
+        },
+  {
     question: 'What color is broccoli?',
     answers: [
       'red',
@@ -68,7 +87,7 @@ function welcomePageSource() {
     <h1>What Is Your Rank?</h1>
     <h2>League of Legend Pop-Quiz!</h2>
     <h2>League of Legend Pop-Quiz! Submit your summonername to start the quiz.</h2>
-    <img src="" alt="">//<!--add an imagae on the page-->
+    <img src="" alt=""><!--add an imagae on the page-->
 
     <form id='quiz-welcome-page'>
       <label for="welcome-page">Your Summonername</label>
@@ -83,8 +102,8 @@ function welcomePageSource() {
 
 function generateQuestion(item) {
   return `<div class="quiz">
-  <h2>${store.question}</h2>
-  <form>
+  <h2>${item.question}</h2>
+  <form class='tomWallace'>
   <input type="radio" id="${item.answers[0]}" name="answer" value="${item.answers[0]}">
   <label for="other">${item.answers[0]}</label><br>
   <input type="radio" id="${item.answers[1]}" name="answer" value="${item.answers[1]}">
@@ -101,18 +120,19 @@ function generateQuestion(item) {
 
 
 function startQuiz() {
-  $('main').submit('#quiz-welcome-page', function (evt) {
-      evt.preventDefault();
-      let userAnswer = $('input[name=welcome-page]').val()
-    store.quizStarted = true;
-    let question = generateQuestion(store.questions[store.questionNumber]);
-    renderAll(question);
-  });
+    $('main').submit('#quiz-welcome-page', function (evt) {
+        evt.preventDefault();
+        let userAnswer = $('input[name=welcome-page]').val()
+        store.quizStarted = true;
+        let question = generateQuestion(store.questions[store.questionNumber]);
+        renderAll(question);
+    });
 }
 
 function handleAnswerChoice() {
-    $("main").on("submit", "form", function (evt) {
+    $(".tomWallace").submit('#quiz-question', function (evt) {
         evt.preventDefault();
+        console.log(store.answer);
         let currentQuestion = store.questions[store.questionNumber];
         let answer = $('input[name=answer]:checked').val();
         console.log(answer, currentQuestion.correctAnswer);
@@ -144,6 +164,7 @@ function renderAll(template) {
 
 function main() {
     startQuiz();
+    handleAnswerChoice();
     renderAll();
 }
 
