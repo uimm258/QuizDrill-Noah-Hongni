@@ -4,26 +4,27 @@
  */
 const store = {
   // 5 or more questions are required
-  questions: [{
-    question: 'What color is broccoli?',
-    answers: [
-      'red',
-      'orange',
-      'pink',
-      'green'
-    ],
-    correctAnswer: 'green'
-  },
-  {
-    question: 'What is the current year?',
-    answers: [
-      '1970',
-      '2015',
-      '2019',
-      '2005'
-    ],
-    correctAnswer: '2019'
-  }
+  questions: [
+    {
+      question: 'What color is broccoli?',
+      answers: [
+        'red',
+        'orange',
+        'pink',
+        'green'
+      ],
+      correctAnswer: 'green'
+    },
+    {
+      question: 'What is the current year?',
+      answers: [
+        '1970',
+        '2015',
+        '2019',
+        '2005'
+      ],
+      correctAnswer: '2019'
+    }
   ],
   quizStarted: false,
   questionNumber: 0,
@@ -44,7 +45,6 @@ const store = {
  *
  */
 /********** TEMPLATE GENERATION FUNCTIONS **********/
-
 function welcomePageSource() {
   return `
   <div class='welcome'>
@@ -76,6 +76,22 @@ function generateQuestion(counter) {
 </form>
 </div>`;
 }
+function returnCorrectAnswer() {
+  const correctTemplate = `<div class='correct-answer'>
+  <h1 class='right-or-wrong'>You Got It!</h1>
+  <button class='next-or-back'>Next Question</button>
+  </div>
+  `;
+  return correctTemplate;
+}
+function returnThatsWrong() {
+  const wrongTemplate = `<div class='correct-answer'>
+  <h1 class='right-or-wrong'>That's not it!</h1>
+  <button class='next-or-back'>Next Question</button>
+  </div>
+  `;
+  return wrongTemplate;
+}
 function startQuiz() {
   $('.ready-section').on('click', '.ready-butt', function () {
     let userAnswer = $('input[name="welcome-page"]').val();
@@ -91,40 +107,36 @@ function handleAnswerChoice() {
     evt.preventDefault();
     let answer = $('input[name="answer"]:checked').val();
     console.log(answer);
-    let count = store.questionNumber;
-    if (answer === store.questions[count].correctAnswer) {
-      store.questionNumber += 1;
-      store.score += 1;
-      let nextQuestion = generateQuestion(store.questionNumber);
-      return renderAll(nextQuestion + returnCorrectAnswer());
-    } else {
-      store.questionNumber += 1;
-
-    }
+    let correctAns = store.questions[store.questionNumber].correctAnswer;
+    renderResults(correctAns);
   });
 }
-function returnCorrectAnswer() {
-  const correctTemplate = `<div class='correct-answer'></div>
-  <h1 class='right-or-wrong'>You Got It!</h1>
-  <button class='next-or-back'>Next Question</button>`;
-  return correctTemplate;
+function handleNextQuestion() {
+  $('.correct-answer').on('click', '.next-or-back', function () {
+    console.log('Next question button');
+    store.quizStarted === true;
+    let counter = store.questionNumber;
+    let question = generateQuestion(counter)
+    renderAll(question);
+  });
 }
-
-function returnThatsWrong() {
-  const wrongTemplate = `<div class='correct-answer'></div>
-  <h1 class='right-or-wrong'>That's not it!</h1>
-  <button class='next-or-back'></button>`;
-  return wrongTemplate;
+function checkAnswer(correctAns) {
+  let answer = $('input[name="answer"]:checked').val();
+  if (answer === correctAns) {
+    store.questionNumber += 1;
+    store.score += 1;
+    return returnCorrectAnswer();
+  } else {
+    store.questionNumber += 1;
+    return returnThatsWrong();
+  }
 }
-
-
-
-
-
-
-
-
-
+function renderResults(answer) {
+  let page = '';
+  page += checkAnswer(answer);
+  $('.main').html(page);
+  handleNextQuestion();
+}
 function renderAll(template) {
   let page = '';
   if (store.quizStarted === false) {
@@ -139,5 +151,6 @@ function main() {
   renderAll();
   startQuiz();
   handleAnswerChoice();
+  handleNextQuestion();
 }
 $(main);
