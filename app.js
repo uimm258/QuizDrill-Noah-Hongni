@@ -23,33 +23,12 @@ const store = {
       '2005'
     ],
     correctAnswer: '2019'
-        },
-  {
-    question: 'What color is broccoli?',
-    answers: [
-      'red',
-      'orange',
-      'pink',
-      'green'
-    ],
-    correctAnswer: 'green'
-  },
-  {
-    question: 'What is the current year?',
-    answers: [
-      '1970',
-      '2015',
-      '2019',
-      '2005'
-    ],
-    correctAnswer: '2019'
   }
   ],
   quizStarted: false,
   questionNumber: 0,
   score: 0
 };
-
 /**
  *
  * Technical requirements:
@@ -64,88 +43,83 @@ const store = {
  * SEE BELOW FOR THE CATEGORIES OF THE TYPES OF FUNCTIONS YOU WILL BE CREATING 👇
  *
  */
-
 /********** TEMPLATE GENERATION FUNCTIONS **********/
 
-/* These functions return HTML templates
-function questionsGenerator(item) {
-    return <div class = `class` >
-        <
-        h2 > $(item.question) < /h2>
-    console.log("`templateGenerator` fn ran")
-        //takes in array/object
-}
-
-
-function answerTemplateGenerator() {
-    console.log('answer generator ran')
-} 
-*/
-
 function welcomePageSource() {
-  return `<div class='welcome'>
+  return `
+  <div class='welcome'>
     <h1>What Is Your Rank?</h1>
     <h2>League of Legend Pop-Quiz!</h2>
     <h2>League of Legend Pop-Quiz! Submit your summonername to start the quiz.</h2>
-    <img src="" alt=""><!--add an imagae on the page-->
-
-    <form id='quiz-welcome-page'>
-      <label for="welcome-page">Your Summonername</label>
-      <input type="text" name="welcome-page" class='quiz-welcome-page' placeholder="e.g. BestLeeSinNA">
-      <button type="enter">Enter</button>
-
-      <button type="submit">Submit and Go</button>
-    </form>
+    <img src="" alt="">//<!--add an imagae on the page-->
+    <div class="ready-section">
+    <label for="welcome-page">Your Summonername</label>
+    <input type="text" name="welcome-page" class='quiz-welcome-page' placeholder="e.g. BestLeeSinNA">
+    <button class="ready-butt">Submit and Go</button>
+    </div>
   </div>
 `;
 }
-
-function generateQuestion(item) {
-  return `<div class="quiz">
-  <h2>${item.question}</h2>
-  <form class='tomWallace'>
-  <input type="radio" id="${item.answers[0]}" name="answer" value="${item.answers[0]}">
-  <label for="other">${item.answers[0]}</label><br>
-  <input type="radio" id="${item.answers[1]}" name="answer" value="${item.answers[1]}">
-  <label for="other">${item.answers[1]}</label><br>
-  <input type="radio" id="${item.answers[2]}" name="answer" value="${item.answers[2]}">
-  <label for="other">${item.answers[2]}</label><br>
-  <input type="radio" id="${item.answers[3]}" name="answer" value="${item.answers[3]}">
-  <label for="other">${item.answers[3]}</label>
-  <button type="submit">Submit</button>
-  </form>
+function generateQuestion(counter) {
+  return `<div class="equiz">
+<h2>${store.questions[counter].question}</h2>
+<form class="tomwallace">
+<input type="radio" id="answers" name="answer" value="${store.questions[counter].answers[0]}">
+<label for="male">${store.questions[counter].answers[0]}</label><br>
+<input type="radio" id="answers" name="answer" value="${store.questions[counter].answers[1]}">
+<label for="female">${store.questions[counter].answers[1]}</label><br>
+<input type="radio" id="answers" name="answer" value="${store.questions[counter].answers[2]}">
+<label for="other">${store.questions[counter].answers[2]}</label>
+<input type="radio" id="answers" name="answer" value="${store.questions[counter].answers[3]}">
+<label for="other">${store.questions[counter].answers[3]}</label>
+<button type="submit">Submit</button>
+</form>
 </div>`;
 }
-
-
-
 function startQuiz() {
-    $('main').submit('#quiz-welcome-page', function (evt) {
-        evt.preventDefault();
-        let userAnswer = $('input[name=welcome-page]').val()
-        store.quizStarted = true;
-        let question = generateQuestion(store.questions[store.questionNumber]);
-        renderAll(question);
-    });
+  $('.ready-section').on('click', '.ready-butt', function () {
+    let userAnswer = $('input[name="welcome-page"]').val();
+    console.log(userAnswer);
+    store.quizStarted = true;
+    let counter = store.questionNumber;
+    let question = generateQuestion(counter);
+    renderAll(question);
+  });
+}
+function handleAnswerChoice() {
+  $('body').submit('#answer-form', function (evt) {
+    evt.preventDefault();
+    let answer = $('input[name="answer"]:checked').val();
+    console.log(answer);
+    let count = store.questionNumber;
+    if (answer === store.questions[count].correctAnswer) {
+      store.questionNumber += 1;
+      store.score += 1;
+      let nextQuestion = generateQuestion(store.questionNumber);
+      return renderAll(nextQuestion + returnCorrectAnswer());
+    } else {
+      store.questionNumber += 1;
+
+    }
+  });
+}
+function returnCorrectAnswer() {
+  const correctTemplate = `<div class='correct-answer'></div>
+  <h1 class='right-or-wrong'>You Got It!</h1>
+  <button class='next-or-back'>Next Question</button>`;
+  return correctTemplate;
 }
 
-function handleAnswerChoice() {
-    $(".tomWallace").submit('#quiz-question', function (evt) {
-        evt.preventDefault();
-        console.log(store.answer);
-        let currentQuestion = store.questions[store.questionNumber];
-        let answer = $('input[name=answer]:checked').val();
-        console.log(answer, currentQuestion.correctAnswer);
-        if (answer === currentQuestion.correctAnswer) {
-            alert("Woot Woot!");
-        } else {
-            alert("You suck!");
-        }
-        store.questionNumber++;
-        let nextQuestion = generateQuestion(store.questions[store.questionNumber]);
-        renderAll(nextQuestion);
-    })
-};
+function returnThatsWrong() {
+  const wrongTemplate = `<div class='correct-answer'></div>
+  <h1 class='right-or-wrong'>That's not it!</h1>
+  <button class='next-or-back'></button>`;
+  return wrongTemplate;
+}
+
+
+
+
 
 
 
@@ -154,42 +128,16 @@ function handleAnswerChoice() {
 function renderAll(template) {
   let page = '';
   if (store.quizStarted === false) {
-    page+= welcomePageSource();
-  } else if (store.quizStarted === true && store.questionNumber < 5) {
-      page+= template
+    page += welcomePageSource();
+  }
+  if (store.quizStarted === true && store.questionNumber < 5) {
+    page += template;
   }
   $('.main').html(page);
 }
-
-
 function main() {
-    startQuiz();
-    handleAnswerChoice();
-    renderAll();
+  renderAll();
+  startQuiz();
+  handleAnswerChoice();
 }
-
 $(main);
-
-
-/*
-function handleAnswerChoice() {
-    $('main').on('submit', 'form', function(evt) {
-        evt.preventDefault();
-        let currentQuestion = store.questions[store.questionNumber]
-        let answer = $('input[name=answer]:checked')
-        console.log($(`input[name=answer]:checked`).val())
-    })
-}
-
-
-
-function render(html) {
-    $('main').html(html)
-}
-
-
-
-
-                /********** EVENT HANDLER FUNCTIONS **********/
-
-// These functions handle events (submit, click, etc)
