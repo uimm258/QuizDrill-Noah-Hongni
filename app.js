@@ -82,15 +82,15 @@ function welcomePageSource() {
 }
 
 function generateQuestion(item) {
-    return `<div class="equiz">
-  <h2>${item.question}</h2>
+  return `<div class="quiz">
+  <h2>${store.question}</h2>
   <form>
   <input type="radio" id="${item.answers[0]}" name="answer" value="${item.answers[0]}">
-  <label for="male">${item.answers[0]}</label><br>
+  <label for="other">${item.answers[0]}</label><br>
   <input type="radio" id="${item.answers[1]}" name="answer" value="${item.answers[1]}">
-  <label for="female">${item.answers[1]}</label><br>
+  <label for="other">${item.answers[1]}</label><br>
   <input type="radio" id="${item.answers[2]}" name="answer" value="${item.answers[2]}">
-  <label for="other">${item.answers[2]}</label>
+  <label for="other">${item.answers[2]}</label><br>
   <input type="radio" id="${item.answers[3]}" name="answer" value="${item.answers[3]}">
   <label for="other">${item.answers[3]}</label>
   <button type="submit">Submit</button>
@@ -101,33 +101,53 @@ function generateQuestion(item) {
 
 
 function startQuiz() {
-    $('main').on('submit', '#next', function (evt) {
-        console.log('Clicked')
-        store.quizStarted = true;
-        let question = generateQuestion(store.questions[store.questionNumber])
-        render(question)
-    })
+  $('main').submit('#quiz-welcome-page', function (evt) {
+      evt.preventDefault();
+      let userAnswer = $('input[name=welcome-page]').val()
+    store.quizStarted = true;
+    let question = generateQuestion(store.questions[store.questionNumber]);
+    renderAll(question);
+  });
 }
 
+function handleAnswerChoice() {
+    $("main").on("submit", "form", function (evt) {
+        evt.preventDefault();
+        let currentQuestion = store.questions[store.questionNumber];
+        let answer = $('input[name=answer]:checked').val();
+        console.log(answer, currentQuestion.correctAnswer);
+        if (answer === currentQuestion.correctAnswer) {
+            alert("Woot Woot!");
+        } else {
+            alert("You suck!");
+        }
+        store.questionNumber++;
+        let nextQuestion = generateQuestion(store.questions[store.questionNumber]);
+        renderAll(nextQuestion);
+    })
+};
 
 
 
 
 
-function renderAll() {
-    let page = ''
-    if (store.quizStarted === false) {
-        page+= welcomePageSource()
-    }
-    $('.main').html(page)
+function renderAll(template) {
+  let page = '';
+  if (store.quizStarted === false) {
+    page+= welcomePageSource();
+  } else if (store.quizStarted === true && store.questionNumber < 5) {
+      page+= template
+  }
+  $('.main').html(page);
 }
 
 
 function main() {
+    startQuiz();
     renderAll();
 }
 
-$(main)
+$(main);
 
 
 /*
