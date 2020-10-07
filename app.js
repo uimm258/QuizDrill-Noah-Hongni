@@ -190,13 +190,18 @@ function endOfQuiz() {
     <h1>Thank you For Taking The quiz!</h1> 
     <h1> Your final score is ${Math.round(store.score / store.questions.length * 100)}%</p>
     <h3>Think you can do better? Try It Again!</h3>
-    <button class="restart">Restart</button>
+    <button class="restart" name="restart">Restart</button>
   </div>`;
   return summary;
 }
+
 function restartQuiz() {
   $('.end-game').on('click', '.restart', function () {
-    location.reload();
+      store.quizStarted = true;
+      store.score = 0;
+      let counter = 0;
+      let question = generateQuestion(counter);
+      renderAll(question); 
   });
 }
 
@@ -204,10 +209,19 @@ function startQuiz() {
   $('.ready-section').on('click', '.ready-butt', function () {
     let userAnswer = $('input[name="welcome-page"]').val();
     console.log(userAnswer);
-    store.quizStarted = true;
-    let counter = store.questionNumber;
-    let question = generateQuestion(counter);
-    renderAll(question);
+
+    if(userAnswer){
+      store.quizStarted = true;
+      let counter = store.questionNumber;
+      let question = generateQuestion(counter);
+      renderAll(question);
+    } else {
+      store.quizStarted = true;
+      let counter = 0;
+      let question = generateQuestion(counter);
+      renderAll(question);
+    }
+
   });
 }
 
@@ -215,13 +229,14 @@ function handleAnswerChoice() {
   $('body').submit('#answer-form', function (evt) {
     evt.preventDefault();
     let answer = $('input[name="answer"]:checked').val();
-    console.log(answer);
-    let correctAns = store.questions[store.questionNumber].correctAnswer;
-    if (store.questionNumber + 1 === store.questions.length) {
-      renderEndPage();
-    } else {
-      renderResults(correctAns);
-    }  
+    if(answer){
+      let correctAns = store.questions[store.questionNumber].correctAnswer;
+      if (store.questionNumber + 1 === store.questions.length) {
+        renderEndPage();
+      } else {
+        renderResults(correctAns);
+      } 
+    } 
   });
 }
 
@@ -270,7 +285,6 @@ function renderAll(template) {
   if (store.quizStarted === true && store.questionNumber < 10) {
     page += template;
   }
-
   if (store.quizStarted === true && store.questionNumber === store.questions.length){
     page += endOfQuiz();
   }
@@ -285,7 +299,9 @@ function renderAll(template) {
 function main() {
   renderAll();
   startQuiz();
+  restartQuiz();
   handleAnswerChoice();
   handleNextQuestion();
 }
+
 $(main);
