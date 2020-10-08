@@ -204,6 +204,7 @@ function restartQuiz() {
     let counter = store.questionNumber;
     let question = generateQuestion(counter);
     renderAll(question);
+    handleNextQuestion();
   });
 }
 
