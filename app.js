@@ -199,6 +199,8 @@ function restartQuiz() {
   $('.end-game').on('click', '.restart', function () {
       let counter = 0;
       if(store.questionNumber===counter){
+        location.reload()
+      }else{
         store.quizStarted = true;
         let question = generateQuestion(counter);
         renderAll(question); 
@@ -217,13 +219,7 @@ function startQuiz() {
       let counter = store.questionNumber;
       let question = generateQuestion(counter);
       renderAll(question);
-    } else {
-      store.quizStarted = true;
-      let counter = 0;
-      let question = generateQuestion(counter);
-      renderResults(question);
-    }
-
+    } 
   });
 }
 
