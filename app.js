@@ -175,9 +175,11 @@ function returnCorrectAnswer() {
 }
 
 function returnThatsWrong() {
+  let questionNumber = store.questionNumber - 1
   const wrongTemplate = `
   <div class='correct-answer'>
     <h1 class='right-or-wrong'>That's not it!</h1>
+    <p>The correct answer is: ${store.questions[questionNumber].correctAnswer}</p>
     <button class='next-or-back'>Next Question</button>
   </div>
   `;
@@ -197,14 +199,17 @@ function endOfQuiz() {
 
 function restartQuiz() {
   $('.end-game').on('click', '.restart', function () {
-      location.reload(); 
+    store.quizStarted = true;
+    store.questionNumber = 0;
+    let counter = store.questionNumber;
+    let question = generateQuestion(counter);
+    renderAll(question);
   });
 }
 
 function startQuiz() {
   $('.ready-section').on('click', '.ready-butt', function () {
     let userAnswer = $('input[name="welcome-page"]').val();
-    console.log(userAnswer);
 
     if(userAnswer){
       store.quizStarted = true;
@@ -237,6 +242,7 @@ function handleNextQuestion() {
     let counter = store.questionNumber;
     let question = generateQuestion(counter);
     renderAll(question);
+    handleNextQuestion();
   });
 }
 
