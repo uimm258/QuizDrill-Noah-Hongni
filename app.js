@@ -197,11 +197,13 @@ function endOfQuiz() {
 
 function restartQuiz() {
   $('.end-game').on('click', '.restart', function () {
-      store.quizStarted = true;
-      store.score = 0;
       let counter = 0;
-      let question = generateQuestion(counter);
-      renderAll(question); 
+      if(store.questionNumber===counter){
+        store.quizStarted = true;
+        let question = generateQuestion(counter);
+        renderAll(question); 
+      }
+      
   });
 }
 
@@ -219,7 +221,7 @@ function startQuiz() {
       store.quizStarted = true;
       let counter = 0;
       let question = generateQuestion(counter);
-      renderAll(question);
+      renderResults(question);
     }
 
   });
@@ -245,7 +247,6 @@ function handleNextQuestion() {
     console.log('Next question button');
     store.quizStarted === true;
     let counter = store.questionNumber;
-    console.log(counter);
     let question = generateQuestion(counter);
     renderAll(question);
   });
@@ -287,6 +288,8 @@ function renderAll(template) {
   }
   if (store.quizStarted === true && store.questionNumber === store.questions.length){
     page += endOfQuiz();
+    store.questionNumber=0;
+    store.score=0
   }
 
   
