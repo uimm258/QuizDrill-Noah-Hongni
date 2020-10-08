@@ -197,15 +197,7 @@ function endOfQuiz() {
 
 function restartQuiz() {
   $('.end-game').on('click', '.restart', function () {
-      let counter = 0;
-      if(store.questionNumber===counter){
-        location.reload()
-      }else{
-        store.quizStarted = true;
-        let question = generateQuestion(counter);
-        renderAll(question); 
-      }
-      
+      location.reload(); 
   });
 }
 
